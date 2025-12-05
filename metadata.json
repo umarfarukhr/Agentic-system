@@ -1,0 +1,5 @@
+{
+  "name": "Agentic AI Assistant",
+  "description": "An enterprise-grade platform to create and manage autonomous AI agents. Users provide natural language prompts, and the system generates multi-step plans, gathers context, and executes tasks with built-in security, auditing, and approval gates.",
+  "requestFramePermissions": []
+}
