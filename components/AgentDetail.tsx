@@ -133,13 +133,10 @@ export function AgentDetail() {
     const task = updatedAgent.tasks.find((t: Task) => t.id === taskId);
     if (task) {
       task.status = approved ? TaskStatus.PENDING : TaskStatus.SKIPPED;
+      updatedAgent.status = AgentStatus.RUNNING; // Resume execution
       updatedAgent = addHistory(updatedAgent, HistoryItemRole.SYSTEM, `Action for task "${task.name}" ${approved ? 'approved' : 'denied'} by user.`);
       setAgent(updatedAgent);
       updateAgent(updatedAgent);
-      simulationControl.current = simulateAgentExecution(updatedAgent, (newUpdatedAgent) => {
-        setAgent(newUpdatedAgent);
-        updateAgent(newUpdatedAgent);
-      });
     }
   };
 
@@ -231,14 +228,14 @@ export function AgentDetail() {
   const renderPlan = () => (
     <div className="p-6 relative">
       {isThinking && agent.status === AgentStatus.REPLANNING && (
-          <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-sm flex flex-col items-center justify-center z-20 rounded-lg">
-              <ArrowPathIcon className="w-10 h-10 text-sky-400 animate-spin" />
-              <p className="mt-4 text-lg font-semibold text-slate-200">Re-planning...</p>
-              <p className="text-sm text-slate-400">An error occurred. The agent is creating a new plan.</p>
+          <div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex flex-col items-center justify-center z-20 rounded-lg">
+              <ArrowPathIcon className="w-10 h-10 text-blue-500 animate-spin" />
+              <p className="mt-4 text-lg font-semibold text-slate-700">Re-planning...</p>
+              <p className="text-sm text-slate-500">An error occurred. The agent is creating a new plan.</p>
           </div>
       )}
       <div className="relative pl-6">
-           <div className="absolute left-[30px] top-0 bottom-0 w-0.5 bg-slate-800" aria-hidden="true"></div>
+           <div className="absolute left-[30px] top-0 bottom-0 w-0.5 bg-slate-200" aria-hidden="true"></div>
            {agent.tasks.map((task, index) => (
               <Step key={task.id} task={task} stepNumber={index + 1} onApproval={handleApproval} />
           ))}
@@ -252,26 +249,26 @@ export function AgentDetail() {
             {agent.history.length > 0 ? agent.history.map(item => <HistoryEntry key={item.id} item={item} />) : <p className="text-slate-500 text-sm p-4 text-center">No activity yet. Run the agent or send a message to get started.</p>}
             {isThinking && agent.status !== AgentStatus.REPLANNING && (
             <div className="flex items-start">
-                <div className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center mr-3 flex-shrink-0"></div>
+                <div className="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center mr-3 flex-shrink-0"></div>
                 <div className="flex flex-col items-start max-w-lg w-full">
-                <div className="bg-slate-800 rounded-lg rounded-bl-none px-3 py-2 w-full animate-pulse">
-                    <div className="h-4 bg-slate-700 rounded w-1/3"></div>
+                <div className="bg-slate-200 rounded-lg rounded-bl-none px-3 py-2 w-full animate-pulse">
+                    <div className="h-4 bg-slate-300 rounded w-1/3"></div>
                 </div>
                 </div>
             </div>
             )}
         </div>
-        <div className="mt-auto pt-4 border-t border-slate-800">
+        <div className="mt-auto pt-4 border-t border-slate-200">
             <form onSubmit={handleChatSubmit} className="flex items-center space-x-2">
             <input
                 type="text"
                 value={chatInput}
                 onChange={(e) => setChatInput(e.target.value)}
                 placeholder={isThinking ? "Agent is thinking..." : "Ask a follow-up or give a new instruction..."}
-                className="flex-1 w-full rounded-md border-0 bg-slate-800 py-1.5 px-3 text-slate-200 ring-1 ring-inset ring-slate-700 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm"
+                className="flex-1 w-full rounded-md border-0 bg-slate-100 py-1.5 px-3 text-slate-800 ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm"
                 disabled={isThinking}
             />
-            <button type="submit" disabled={!chatInput.trim() || isThinking} className="p-2 bg-sky-600 text-white rounded-full hover:bg-sky-500 disabled:bg-slate-600 disabled:cursor-not-allowed transition-colors">
+            <button type="submit" disabled={!chatInput.trim() || isThinking} className="p-2 bg-blue-600 text-white rounded-full hover:bg-blue-500 disabled:bg-slate-400 disabled:cursor-not-allowed transition-colors">
                 <PaperAirplaneIcon className="w-5 h-5"/>
             </button>
             </form>
@@ -284,18 +281,18 @@ export function AgentDetail() {
 
   return (
     <>
-      <div className="flex-1 flex flex-col">
-        <div className="flex-shrink-0 p-6 border-b border-slate-800">
+      <div className="flex-1 flex flex-col bg-white">
+        <div className="flex-shrink-0 p-6 border-b border-slate-200">
           <div className="flex justify-between items-start">
               <div>
                   <div className="flex items-center gap-3 mb-1">
-                      <h2 className="text-2xl font-bold text-slate-100">{agent.name}</h2>
+                      <h2 className="text-2xl font-bold text-slate-800">{agent.name}</h2>
                       <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-sm font-semibold border ${statusConfig.badgeClasses}`}>
                         <StatusIcon className="w-4 h-4 mr-1.5" />
                         {statusConfig.label}
                       </span>
                   </div>
-                  <p className="text-slate-400 mt-1 max-w-2xl">{agent.goal}</p>
+                  <p className="text-slate-500 mt-1 max-w-2xl">{agent.goal}</p>
                   <div className="mt-3 flex items-center gap-3">
                     {isEditingTags ? (
                         <div className="flex-1">
@@ -304,7 +301,7 @@ export function AgentDetail() {
                     ) : (
                         <div className="flex items-center flex-wrap gap-2">
                             {(agent.tags && agent.tags.length > 0) ? agent.tags.map(tag => (
-                                <span key={tag} className="inline-flex items-center px-2.5 py-1 rounded-full text-sm font-medium bg-slate-800 text-slate-300">
+                                <span key={tag} className="inline-flex items-center px-2.5 py-1 rounded-full text-sm font-medium bg-slate-100 text-slate-700">
                                     {tag}
                                 </span>
                             )) : <p className="text-sm text-slate-500">No tags assigned.</p>}
@@ -313,34 +310,34 @@ export function AgentDetail() {
                     <div className="flex items-center gap-2">
                     {isEditingTags ? (
                         <>
-                            <button onClick={handleSaveTags} className="p-1.5 bg-green-500/20 text-green-300 rounded-full hover:bg-green-500/40 transition-colors"><CheckIcon className="w-4 h-4"/></button>
-                            <button onClick={handleCancelEditTags} className="p-1.5 bg-red-500/20 text-red-300 rounded-full hover:bg-red-500/40 transition-colors"><XMarkIcon className="w-4 h-4"/></button>
+                            <button onClick={handleSaveTags} className="p-1.5 bg-green-100 text-green-700 rounded-full hover:bg-green-200 transition-colors"><CheckIcon className="w-4 h-4"/></button>
+                            <button onClick={handleCancelEditTags} className="p-1.5 bg-red-100 text-red-700 rounded-full hover:bg-red-200 transition-colors"><XMarkIcon className="w-4 h-4"/></button>
                         </>
                     ) : (
-                        <button onClick={() => setIsEditingTags(true)} className="p-1.5 bg-slate-700/70 text-slate-300 rounded-full hover:bg-slate-700 transition-colors"><PencilIcon className="w-4 h-4"/></button>
+                        <button onClick={() => setIsEditingTags(true)} className="p-1.5 bg-slate-200 text-slate-600 rounded-full hover:bg-slate-300 transition-colors"><PencilIcon className="w-4 h-4"/></button>
                     )}
                     </div>
                   </div>
               </div>
               <div className="flex items-center space-x-2 flex-shrink-0">
-                <button onClick={() => handleControlClick(AgentStatus.RUNNING)} disabled={agent.status === AgentStatus.RUNNING || agent.status === AgentStatus.FINISHED || isThinking} className="p-2 bg-green-500/10 text-green-400 rounded-full hover:bg-green-500/20 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"><PlayIcon className="w-5 h-5"/></button>
-                <button onClick={() => handleControlClick(AgentStatus.PAUSED)} disabled={agent.status !== AgentStatus.RUNNING} className="p-2 bg-yellow-500/10 text-yellow-400 rounded-full hover:bg-yellow-500/20 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"><PauseIcon className="w-5 h-5"/></button>
-                <button onClick={() => handleControlClick(AgentStatus.IDLE)} disabled={agent.status === AgentStatus.IDLE} className="p-2 bg-red-500/10 text-red-400 rounded-full hover:bg-red-500/20 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"><StopIcon className="w-5 h-5"/></button>
-                <div className="border-l border-slate-700 h-6 mx-2"></div>
-                <button onClick={handleExportLogs} className="p-2 bg-slate-700 text-slate-300 rounded-full hover:bg-slate-700/50 transition-colors"><DocumentArrowDownIcon className="w-5 h-5"/></button>
-                <button onClick={() => setIsDeleteModalOpen(true)} className="p-2 bg-slate-700 text-slate-300 rounded-full hover:bg-red-500/20 hover:text-red-300 transition-colors"><TrashIcon className="w-5 h-5"/></button>
+                <button onClick={() => handleControlClick(AgentStatus.RUNNING)} disabled={agent.status === AgentStatus.RUNNING || agent.status === AgentStatus.FINISHED || isThinking} className="p-2 bg-green-100 text-green-600 rounded-full hover:bg-green-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"><PlayIcon className="w-5 h-5"/></button>
+                <button onClick={() => handleControlClick(AgentStatus.PAUSED)} disabled={agent.status !== AgentStatus.RUNNING} className="p-2 bg-yellow-100 text-yellow-600 rounded-full hover:bg-yellow-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"><PauseIcon className="w-5 h-5"/></button>
+                <button onClick={() => handleControlClick(AgentStatus.IDLE)} disabled={agent.status === AgentStatus.IDLE} className="p-2 bg-red-100 text-red-600 rounded-full hover:bg-red-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"><StopIcon className="w-5 h-5"/></button>
+                <div className="border-l border-slate-200 h-6 mx-2"></div>
+                <button onClick={handleExportLogs} className="p-2 bg-slate-100 text-slate-600 rounded-full hover:bg-slate-200 transition-colors"><DocumentArrowDownIcon className="w-5 h-5"/></button>
+                <button onClick={() => setIsDeleteModalOpen(true)} className="p-2 bg-slate-100 text-slate-600 rounded-full hover:bg-red-100 hover:text-red-600 transition-colors"><TrashIcon className="w-5 h-5"/></button>
               </div>
           </div>
         </div>
 
-        <div className="border-b border-slate-800 px-6">
+        <div className="border-b border-slate-200 px-6">
             <nav className="-mb-px flex space-x-6" aria-label="Tabs">
                 <button
                 onClick={() => setActiveTab('plan')}
                 className={`whitespace-nowrap py-3 px-1 border-b-2 font-semibold text-sm transition-colors ${
                     activeTab === 'plan'
-                    ? 'border-sky-500 text-sky-400'
-                    : 'border-transparent text-slate-400 hover:text-slate-200 hover:border-slate-500'
+                    ? 'border-blue-500 text-blue-600'
+                    : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'
                 }`}
                 >
                 Execution Plan
@@ -349,8 +346,8 @@ export function AgentDetail() {
                 onClick={() => setActiveTab('activity')}
                 className={`whitespace-nowrap py-3 px-1 border-b-2 font-semibold text-sm transition-colors ${
                     activeTab === 'activity'
-                    ? 'border-sky-500 text-sky-400'
-                    : 'border-transparent text-slate-400 hover:text-slate-200 hover:border-slate-500'
+                    ? 'border-blue-500 text-blue-600'
+                    : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'
                 }`}
                 >
                 Chat & Activity
@@ -363,7 +360,7 @@ export function AgentDetail() {
         </div>
       </div>
       <Modal isOpen={isDeleteModalOpen} onClose={() => setIsDeleteModalOpen(false)} onConfirm={handleDeleteConfirm} title="Delete Agent" confirmText="Delete" isDestructive>
-        <p className="text-sm text-slate-300">Are you sure you want to delete the agent "{agent.name}"? This action is permanent and cannot be undone.</p>
+        <p className="text-sm text-slate-600">Are you sure you want to delete the agent "{agent.name}"? This action is permanent and cannot be undone.</p>
       </Modal>
     </>
   );

@@ -19,9 +19,9 @@ export function Integrations() {
   return (
     <>
       <div className="p-6">
-        <div className="pb-4 border-b border-slate-800">
-          <h2 className="text-2xl font-bold text-slate-100">Integrations</h2>
-          <p className="text-slate-400 mt-1 max-w-2xl">
+        <div className="pb-4 border-b border-slate-200">
+          <h2 className="text-2xl font-bold text-slate-800">Integrations</h2>
+          <p className="text-slate-500 mt-1 max-w-2xl">
             Connect and manage the tools available for AI agents to use in their execution plans.
           </p>
         </div>

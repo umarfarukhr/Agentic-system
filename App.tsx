@@ -25,10 +25,10 @@ function AppContent() {
         return <AgentDetail key={selectedAgent.id} />;
       }
       return (
-        <div className="flex-1 flex items-center justify-center h-full">
-          <div className="text-center">
-             <BeakerIcon className="w-16 h-16 text-slate-700 mx-auto mb-4" />
-            <h2 className="text-xl font-semibold text-slate-400">No Agent Selected</h2>
+        <div className="flex-1 flex items-center justify-center h-full bg-slate-50">
+          <div className="text-center p-8">
+             <BeakerIcon className="w-16 h-16 text-slate-400 mx-auto mb-4" />
+            <h2 className="text-xl font-semibold text-slate-700">No Agent Selected</h2>
             <p className="text-slate-500 mt-2 max-w-sm">Select an agent from the list to see its details, or create a new one to get started.</p>
           </div>
         </div>
@@ -38,18 +38,18 @@ function AppContent() {
   };
 
   return (
-    <div className="flex h-full bg-slate-950/80 text-slate-100 font-sans antialiased">
+    <div className="flex h-full bg-white text-slate-800 font-sans antialiased">
       <Sidebar activeView={activeView} setActiveView={setActiveView} />
       
       {activeView === 'agents' && (
-        <div className="w-[350px] flex-shrink-0 border-r border-slate-800 overflow-y-auto">
+        <div className="w-[350px] flex-shrink-0 border-r border-slate-200 overflow-y-auto bg-slate-100">
           <Dashboard />
         </div>
       )}
 
       <div className="flex-1 flex flex-col overflow-hidden">
         <Header activeView={activeView} />
-        <main className="flex-1 overflow-y-auto">
+        <main className="flex-1 overflow-y-auto bg-slate-50">
           {renderMainContent()}
         </main>
       </div>

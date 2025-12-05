@@ -15,13 +15,15 @@ export function simulateAgentExecution(
   let timeoutId: number | null = null;
 
   const addHistory = (agent: Agent, role: HistoryItemRole, content: string, taskId?: string): Agent => {
-    const newHistoryItem: HistoryItem = { id: `hist-${Date.now()}`, timestamp: new Date().toISOString(), role, content, taskId };
-    const task = taskId ? agent.tasks.find(t => t.id === taskId) : null;
+    const newHistoryItem: HistoryItem = { id: `hist-${Date.now()}-${Math.random()}`, timestamp: new Date().toISOString(), role, content, taskId };
+    const newAgent = JSON.parse(JSON.stringify(agent));
+    
+    const task = taskId ? newAgent.tasks.find((t: any) => t.id === taskId) : null;
     if (task) {
       task.history.push(newHistoryItem);
     }
-    agent.history.push(newHistoryItem);
-    return agent;
+    newAgent.history.push(newHistoryItem);
+    return newAgent;
   };
   
   const runStep = () => {
@@ -49,28 +51,34 @@ export function simulateAgentExecution(
     onUpdate(agentState);
 
     timeoutId = window.setTimeout(() => {
+      let stateAfterFirstTimeout = JSON.parse(JSON.stringify(agentState));
+
       if (task.requiresApproval) {
         task.status = TaskStatus.AWAITING_APPROVAL;
-        agentState = addHistory(agentState, HistoryItemRole.SYSTEM, `Human approval required to proceed.`, task.id);
-        onUpdate(agentState);
+        stateAfterFirstTimeout.status = AgentStatus.PAUSED;
+        stateAfterFirstTimeout = addHistory(stateAfterFirstTimeout, HistoryItemRole.SYSTEM, `Human approval required to proceed.`, task.id);
+        onUpdate(stateAfterFirstTimeout);
       } else {
-        agentState = addHistory(agentState, HistoryItemRole.TOOL_INPUT, `Executing tool ${task.tool} with params...`, task.id);
-        onUpdate(agentState);
+        stateAfterFirstTimeout = addHistory(stateAfterFirstTimeout, HistoryItemRole.TOOL_INPUT, `Executing tool ${task.tool} with params...`, task.id);
+        onUpdate(stateAfterFirstTimeout);
         
         timeoutId = window.setTimeout(() => {
+            let stateAfterSecondTimeout = JSON.parse(JSON.stringify(stateAfterFirstTimeout));
+            const currentTaskInState = stateAfterSecondTimeout.tasks[currentTaskIndex];
+            
             const success = Math.random() > 0.15; // 85% success rate
             if (success) {
-                task.status = TaskStatus.COMPLETED;
-                task.result = `Tool ${task.tool} executed successfully. Output: { "status": "ok" }`;
-                agentState = addHistory(agentState, HistoryItemRole.TOOL_OUTPUT, task.result, task.id);
-                agentState = addHistory(agentState, HistoryItemRole.SYSTEM, 'Task completed successfully.', task.id);
+                currentTaskInState.status = TaskStatus.COMPLETED;
+                currentTaskInState.result = `Tool ${task.tool} executed successfully. Output: { "status": "ok" }`;
+                stateAfterSecondTimeout = addHistory(stateAfterSecondTimeout, HistoryItemRole.TOOL_OUTPUT, currentTaskInState.result, task.id);
+                stateAfterSecondTimeout = addHistory(stateAfterSecondTimeout, HistoryItemRole.SYSTEM, 'Task completed successfully.', task.id);
             } else {
-                task.status = TaskStatus.FAILED;
-                task.result = `Tool ${task.tool} failed. Error: Connection timed out.`;
-                agentState = addHistory(agentState, HistoryItemRole.SYSTEM, task.result, task.id);
-                agentState.status = AgentStatus.REPLANNING;
+                currentTaskInState.status = TaskStatus.FAILED;
+                currentTaskInState.result = `Tool ${task.tool} failed. Error: Connection timed out.`;
+                stateAfterSecondTimeout = addHistory(stateAfterSecondTimeout, HistoryItemRole.SYSTEM, currentTaskInState.result, task.id);
+                stateAfterSecondTimeout.status = AgentStatus.REPLANNING;
             }
-            onUpdate(agentState);
+            onUpdate(stateAfterSecondTimeout);
             
             if (success) {
                 currentTaskIndex++;

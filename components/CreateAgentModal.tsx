@@ -136,14 +136,14 @@ export function CreateAgentModal({ isOpen, onClose }: CreateAgentModalProps) {
     >
         <div className="space-y-4">
             <div>
-                <label htmlFor="agent-goal" className="block text-sm font-medium text-slate-300 mb-1">Agent Goal</label>
+                <label htmlFor="agent-goal" className="block text-sm font-medium text-slate-700 mb-1">Agent Goal</label>
                 <textarea
                     id="agent-goal"
                     value={prompt}
                     onChange={(e) => setPrompt(e.target.value)}
                     placeholder="Enter a detailed goal for your agent..."
-                    className={`w-full p-2 bg-slate-800 border rounded-md focus:ring-2 focus:ring-sky-500 focus:outline-none text-slate-200 text-sm resize-none transition-colors ${
-                        error ? 'border-red-500/70' : 'border-slate-700'
+                    className={`w-full p-2 bg-white border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none text-slate-800 text-sm resize-none transition-colors ${
+                        error ? 'border-red-500/70' : 'border-slate-300'
                     }`}
                     rows={4}
                     disabled={isLoading || isSuccess}
@@ -153,22 +153,22 @@ export function CreateAgentModal({ isOpen, onClose }: CreateAgentModalProps) {
                 />
                  <div id="prompt-error" className="flex justify-between items-center mt-1 px-1 min-h-[16px]">
                     {error ? (
-                        <p className="text-red-400 text-xs flex items-center flex-1">
+                        <p className="text-red-600 text-xs flex items-center flex-1">
                             <ExclamationCircleIcon className="w-4 h-4 mr-1.5 flex-shrink-0" />
                             <span>{error}</span>
                         </p>
                     ) : <div className="flex-1" />}
-                    <span className={`text-xs font-mono ${prompt.length > MAX_PROMPT_LENGTH - 20 ? 'text-yellow-400' : 'text-slate-400'}`}>
+                    <span className={`text-xs font-mono ${prompt.length > MAX_PROMPT_LENGTH - 20 ? 'text-yellow-600' : 'text-slate-500'}`}>
                         {prompt.length}/{MAX_PROMPT_LENGTH}
                     </span>
                 </div>
             </div>
              <div>
-                <label htmlFor="agent-tags" className="block text-sm font-medium text-slate-300 mb-1">Tags</label>
+                <label htmlFor="agent-tags" className="block text-sm font-medium text-slate-700 mb-1">Tags</label>
                 <TagInput tags={tags} onTagsChange={setTags} placeholder="Add tags... (e.g., sre, prod)" />
              </div>
              <div>
-                <h3 className="text-sm font-medium text-slate-300 mb-2">Or, start with a template</h3>
+                <h3 className="text-sm font-medium text-slate-700 mb-2">Or, start with a template</h3>
                 <div className="space-y-2 max-h-40 overflow-y-auto pr-2">
                     {agentTemplates.map((template) => (
                     <button
@@ -177,11 +177,11 @@ export function CreateAgentModal({ isOpen, onClose }: CreateAgentModalProps) {
                         setPrompt(template.goal);
                         setError(null);
                         }}
-                        className="w-full text-left p-3 bg-slate-800/50 hover:bg-slate-800/80 rounded-lg border border-slate-700/50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-sky-500"
+                        className="w-full text-left p-3 bg-slate-50 hover:bg-slate-100 rounded-lg border border-slate-200 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         disabled={isLoading || isSuccess}
                     >
-                        <p className="font-semibold text-sm text-slate-200">{template.name}</p>
-                        <p className="text-xs text-slate-400 mt-1 truncate">{template.goal}</p>
+                        <p className="font-semibold text-sm text-slate-700">{template.name}</p>
+                        <p className="text-xs text-slate-500 mt-1 truncate">{template.goal}</p>
                     </button>
                     ))}
                 </div>

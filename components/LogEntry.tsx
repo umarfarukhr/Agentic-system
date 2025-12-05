@@ -8,11 +8,11 @@ interface HistoryEntryProps {
 }
 
 const roleConfig: Record<HistoryItemRole, { color: string; label: string }> = {
-  [HistoryItemRole.USER]: { color: 'text-slate-300', label: 'USER' },
-  [HistoryItemRole.AGENT]: { color: 'text-slate-300', label: 'AGENT' },
-  [HistoryItemRole.SYSTEM]: { color: 'text-purple-400', label: 'SYSTEM' },
-  [HistoryItemRole.TOOL_INPUT]: { color: 'text-cyan-400', label: 'TOOL_INPUT' },
-  [HistoryItemRole.TOOL_OUTPUT]: { color: 'text-green-400', label: 'TOOL_OUTPUT' },
+  [HistoryItemRole.USER]: { color: 'text-slate-800', label: 'USER' },
+  [HistoryItemRole.AGENT]: { color: 'text-slate-800', label: 'AGENT' },
+  [HistoryItemRole.SYSTEM]: { color: 'text-purple-600', label: 'SYSTEM' },
+  [HistoryItemRole.TOOL_INPUT]: { color: 'text-cyan-600', label: 'TOOL_INPUT' },
+  [HistoryItemRole.TOOL_OUTPUT]: { color: 'text-green-600', label: 'TOOL_OUTPUT' },
 };
 
 export function HistoryEntry({ item }: HistoryEntryProps) {
@@ -22,13 +22,13 @@ export function HistoryEntry({ item }: HistoryEntryProps) {
     return (
       <div className="flex items-start justify-end">
         <div className="flex flex-col items-end max-w-lg">
-          <div className="bg-sky-600 rounded-2xl rounded-br-lg px-4 py-2">
+          <div className="bg-blue-600 rounded-2xl rounded-br-lg px-4 py-2">
             <p className="text-sm text-white">{item.content}</p>
           </div>
-          <span className="text-xs text-slate-500 mt-1">{timestamp}</span>
+          <span className="text-xs text-slate-400 mt-1">{timestamp}</span>
         </div>
-        <div className="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center ml-3 flex-shrink-0">
-          <UserIcon className="w-5 h-5 text-slate-300" />
+        <div className="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center ml-3 flex-shrink-0">
+          <UserIcon className="w-5 h-5 text-slate-500" />
         </div>
       </div>
     );
@@ -37,14 +37,14 @@ export function HistoryEntry({ item }: HistoryEntryProps) {
   if (item.role === HistoryItemRole.AGENT) {
     return (
       <div className="flex items-start">
-        <div className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center mr-3 flex-shrink-0">
-          <BotIcon className="w-5 h-5 text-slate-300" />
+        <div className="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center mr-3 flex-shrink-0">
+          <BotIcon className="w-5 h-5 text-slate-500" />
         </div>
         <div className="flex flex-col items-start max-w-lg">
-          <div className="bg-slate-800 rounded-2xl rounded-bl-lg px-4 py-2">
-            <p className="text-sm text-slate-200">{item.content}</p>
+          <div className="bg-slate-200 rounded-2xl rounded-bl-lg px-4 py-2">
+            <p className="text-sm text-slate-700">{item.content}</p>
           </div>
-          <span className="text-xs text-slate-500 mt-1">{timestamp}</span>
+          <span className="text-xs text-slate-400 mt-1">{timestamp}</span>
         </div>
       </div>
     );

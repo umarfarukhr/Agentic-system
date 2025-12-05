@@ -43,7 +43,7 @@ export function ConfigurationModal({ tool, isOpen, onClose }: ConfigurationModal
         title={`Configure ${tool.name}`}
         confirmText="Done"
       >
-        <p className="text-sm text-slate-300">This tool does not require any specific client-side configuration. It is managed by the system administrator on the backend.</p>
+        <p className="text-sm text-slate-600">This tool does not require any specific client-side configuration. It is managed by the system administrator on the backend.</p>
       </Modal>
     );
   }
@@ -57,12 +57,12 @@ export function ConfigurationModal({ tool, isOpen, onClose }: ConfigurationModal
       confirmText="Save Configuration"
     >
       <div className="space-y-4">
-        <p className="text-sm text-slate-400">
+        <p className="text-sm text-slate-500">
           Enter the required credentials to connect to the {tool.name} API. Credentials are saved securely in your browser's local storage.
         </p>
         {tool.configurationFields.map(field => (
           <div key={field.name}>
-            <label htmlFor={field.name} className="block text-sm font-medium text-slate-300">
+            <label htmlFor={field.name} className="block text-sm font-medium text-slate-700">
               {field.label}
             </label>
             <div className="mt-1">
@@ -70,7 +70,7 @@ export function ConfigurationModal({ tool, isOpen, onClose }: ConfigurationModal
                 type={field.type}
                 name={field.name}
                 id={field.name}
-                className="block w-full rounded-md border-0 bg-slate-800 py-1.5 px-3 text-slate-200 ring-1 ring-inset ring-slate-700 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm"
+                className="block w-full rounded-md border-0 bg-white py-1.5 px-3 text-slate-800 ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm"
                 placeholder={field.placeholder || ''}
                 value={formState[field.name] || ''}
                 onChange={handleChange}

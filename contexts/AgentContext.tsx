@@ -43,7 +43,8 @@ export function AgentProvider({ children }: { children: ReactNode }) {
       setSelectedAgent(agents[0]);
     } 
     else if (selectedAgent && !agents.some(a => a.id === selectedAgent.id)) {
-        setSelectedAgent(agents.length > 0 ? agents[0] : null);
+        // The selected agent was deleted or is no longer in the list
+        setSelectedAgent(null);
     }
     else if (agents.length === 0) {
         setSelectedAgent(null);
@@ -66,7 +67,7 @@ export function AgentProvider({ children }: { children: ReactNode }) {
     setAgents(prev => {
         const newAgents = prev.filter(a => a.id !== agentId);
         if (selectedAgent && selectedAgent.id === agentId) {
-            setSelectedAgent(newAgents.length > 0 ? newAgents[0] : null);
+            setSelectedAgent(null); // Deselect agent on deletion
         }
         return newAgents;
     });

@@ -182,32 +182,32 @@ const XCircleIconSolid = (props: React.SVGProps<SVGSVGElement>) => (
 export const statusDisplayConfig: Record<AgentStatus, { label: string; badgeClasses: string; icon: React.ElementType }> = {
     [AgentStatus.IDLE]: {
         label: 'Idle',
-        badgeClasses: 'bg-slate-700/80 text-slate-300 border-slate-600',
+        badgeClasses: 'bg-slate-100 text-slate-600 border-slate-300',
         icon: PauseIcon,
     },
     [AgentStatus.RUNNING]: {
         label: 'Running',
-        badgeClasses: 'bg-green-500/20 text-green-300 border-green-500/40 animate-pulse',
+        badgeClasses: 'bg-green-100 text-green-700 border-green-300 animate-pulse',
         icon: PlayIcon,
     },
     [AgentStatus.PAUSED]: {
         label: 'Paused',
-        badgeClasses: 'bg-yellow-500/20 text-yellow-300 border-yellow-500/40',
+        badgeClasses: 'bg-yellow-100 text-yellow-800 border-yellow-300',
         icon: PauseIcon,
     },
     [AgentStatus.FINISHED]: {
         label: 'Finished',
-        badgeClasses: 'bg-sky-500/20 text-sky-300 border-sky-500/40',
+        badgeClasses: 'bg-blue-100 text-blue-700 border-blue-300',
         icon: CheckCircleIconSolid,
     },
     [AgentStatus.ERROR]: {
         label: 'Error',
-        badgeClasses: 'bg-red-500/20 text-red-300 border-red-500/40',
+        badgeClasses: 'bg-red-100 text-red-700 border-red-300',
         icon: XCircleIconSolid,
     },
     [AgentStatus.REPLANNING]: {
         label: 'Replanning',
-        badgeClasses: 'bg-purple-500/20 text-purple-300 border-purple-500/40 animate-pulse',
+        badgeClasses: 'bg-purple-100 text-purple-700 border-purple-300 animate-pulse',
         icon: ArrowPathIcon,
     },
 };
@@ -360,8 +360,8 @@ const sampleAgent1: Agent = {
 
 
 const sampleTasks2: Task[] = [
-  { id: 't5', name: 'Scan S3 Bucket', description: 'Scan `s3://customer-uploads` for new files.', tool: 'AWS_S3', status: TaskStatus.COMPLETED, requiresApproval: false, history: [] },
-  { id: 't6', name: 'Analyze File Content', description: 'Use NLP model to classify the content of new files.', tool: 'GenericAPI', status: TaskStatus.COMPLETED, requiresApproval: false, history: [] },
+  { id: 't5', name: 'Scan S3 Bucket', description: 'Scan `s3://customer-uploads` for new files.', tool: 'AWS_S3', status: TaskStatus.COMPLETED, requiresApproval: false, history: [], result: 'Tool AWS_S3 executed successfully. Found 3 new files.' },
+  { id: 't6', name: 'Analyze File Content', description: 'Use NLP model to classify the content of new files.', tool: 'GenericAPI', status: TaskStatus.COMPLETED, requiresApproval: false, history: [], result: 'Tool GenericAPI executed successfully. Classification: 2x "invoice", 1x "receipt".' },
   { id: 't7', name: 'Update CRM Record', description: 'Update the corresponding customer record in Salesforce with the analysis summary.', tool: 'SalesforceAPI', status: TaskStatus.AWAITING_APPROVAL, requiresApproval: true, history: [] },
   { id: 't8', name: 'Archive File', description: 'Move the processed file to `s3://customer-uploads-archive`.', tool: 'AWS_S3', status: TaskStatus.PENDING, requiresApproval: false, history: [] },
 ];

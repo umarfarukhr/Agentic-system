@@ -39,13 +39,13 @@ export function TagInput({ tags, onTagsChange, placeholder = "Add tags..." }: Ta
   };
 
   return (
-    <div className="flex items-center flex-wrap gap-2 p-2 bg-slate-800 border border-slate-700 rounded-md focus-within:ring-2 focus-within:ring-sky-500">
+    <div className="flex items-center flex-wrap gap-2 p-2 bg-white border border-slate-300 rounded-md focus-within:ring-2 focus-within:ring-blue-500">
       {tags.map((tag, index) => (
-        <div key={index} className="flex items-center bg-sky-800/50 text-sky-300 text-xs font-medium px-2 py-1 rounded-full">
+        <div key={index} className="flex items-center bg-blue-100 text-blue-700 text-xs font-medium px-2 py-1 rounded-full">
           <span>{tag}</span>
           <button
             type="button"
-            className="ml-1.5 -mr-0.5 rounded-full hover:bg-sky-500/50"
+            className="ml-1.5 -mr-0.5 rounded-full hover:bg-blue-200"
             onClick={() => removeTag(index)}
           >
             <XMarkIcon className="h-3 w-3" />
@@ -59,7 +59,7 @@ export function TagInput({ tags, onTagsChange, placeholder = "Add tags..." }: Ta
         onKeyDown={handleKeyDown}
         onPaste={handlePaste}
         placeholder={tags.length === 0 ? placeholder : ''}
-        className="bg-transparent focus:outline-none text-slate-200 text-sm flex-1 min-w-[80px]"
+        className="bg-transparent focus:outline-none text-slate-800 text-sm flex-1 min-w-[80px]"
       />
     </div>
   );
